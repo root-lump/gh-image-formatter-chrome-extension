@@ -57,3 +57,7 @@ gh-image-formatter-chrome-extension/
 │       └── style.css
 └── manifest.json
 ```
+
+## Acknowledgements
+
+This project uses SVG icons from [GitHub Primer Octicons](https://github.com/primer/octicons), licensed under the MIT License.
