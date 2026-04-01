@@ -1,0 +1,161 @@
+body {
+  width: 280px;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #24292f;
+  user-select: none;
+}
+
+/* ヘッダー */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 16px 0;
+}
+
+.header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.save-icon {
+  color: #656d76;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.save-icon.visible {
+  opacity: 1;
+}
+
+/* 設定行 */
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 32px;
+  margin-bottom: 12px;
+}
+
+.setting-label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* トグルスイッチ */
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle .slider {
+  position: absolute;
+  inset: 0;
+  background-color: #d0d7de;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle .slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .slider {
+  background-color: #2da44e;
+}
+
+.toggle input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+/* 幅入力 */
+.width-input {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.width-input input[type="number"] {
+  width: 64px;
+  height: 30px;
+  padding: 0 0 0 8px;
+  border: 1px solid #d0d7de;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+  box-sizing: border-box;
+  -moz-appearance: textfield;
+}
+
+.width-input input[type="number"]::-webkit-inner-spin-button,
+.width-input input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.spinner {
+  display: flex;
+  flex-direction: column;
+  height: 30px;
+  border: 1px solid #d0d7de;
+  border-left: none;
+  box-sizing: border-box;
+}
+
+.spinner button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 14px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: #f6f8fa;
+  cursor: pointer;
+  font-size: 8px;
+  line-height: 1;
+  color: #656d76;
+}
+
+.spinner button:hover {
+  background: #e9ecef;
+  color: #24292f;
+}
+
+.spinner button:first-child {
+  border-bottom: 1px solid #d0d7de;
+}
+
+.width-input select {
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 0 6px 6px 0;
+  font-size: 14px;
+  background: #f6f8fa;
+  cursor: pointer;
+  margin: 0;
+  box-sizing: border-box;
+}

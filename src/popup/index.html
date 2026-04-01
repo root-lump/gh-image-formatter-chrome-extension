@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="header">
+    <h1>GitHub Image Formatter</h1>
+    <svg id="saveIcon" class="save-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M1 1.75C1 .784 1.784 0 2.75 0h7.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 13.25 15h-10.5A1.75 1.75 0 0 1 1 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v11.5c0 .138.112.25.25.25h.5V9.25a.75.75 0 0 1 .75-.75h7a.75.75 0 0 1 .75.75V13.5h.5a.25.25 0 0 0 .25-.25V4.664a.25.25 0 0 0-.073-.177l-2.914-2.914a.25.25 0 0 0-.177-.073H5v3.25a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75Zm6.5 12V10h-5.5v3.5Zm-4-11.5v1.5h1V2Z"/>
+    </svg>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label">フォーマットボタンを表示</span>
+    <label class="toggle">
+      <input type="checkbox" id="showButton" checked />
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label">自動検出</span>
+    <label class="toggle">
+      <input type="checkbox" id="autoDetect" checked />
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label">画像の幅</span>
+    <div class="width-input">
+      <input type="number" id="imageWidthValue" value="100" min="1" max="100" step="1" />
+      <div class="spinner">
+        <button type="button" id="spinUp">&#9650;</button>
+        <button type="button" id="spinDown">&#9660;</button>
+      </div>
+      <select id="imageWidthUnit">
+        <option value="%">%</option>
+        <option value="px">px</option>
+      </select>
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

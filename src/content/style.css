@@ -1,0 +1,29 @@
+/* GitHub Image Formatter - ツールバーボタン */
+
+.gh-image-formatter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  margin: 0;
+  color: var(--fgColor-muted, #656d76);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  vertical-align: bottom;
+  line-height: 0;
+  position: relative;
+  top: 0;
+}
+
+.gh-image-formatter-btn:hover {
+  color: var(--fgColor-default, #1f2328);
+  background-color: var(--bgColor-neutral-muted, rgba(175, 184, 193, 0.2));
+}
+
+.gh-image-formatter-btn svg {
+  display: block;
+}
