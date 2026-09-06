@@ -2,7 +2,7 @@
 
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/) [![Manifest V3](https://img.shields.io/badge/Manifest-V3-34A853)](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-GitHubのIssue・PRで貼り付けた画像を自動的にセンター揃え＆リサイズするChrome拡張機能です。
+GitHubのIssue・PRの本文、通常コメント、差分レビューコメントで貼り付けた画像を自動的にセンター揃え＆リサイズするChrome拡張機能です。
 
 ## 変換例
 
@@ -41,6 +41,15 @@ GitHubのIssue・PRで貼り付けた画像を自動的にセンター揃え＆�
 | フォーマットボタンを表示 | ツールバーにボタンを追加 | ON |
 | 自動検出 | ペースト時に自動フォーマット | ON |
 | 画像の幅 | 変換後の画像幅 | 100% |
+
+## テスト
+
+開発依存関係をインストールした後、次のコマンドで DOM 回帰テストを実行できます。
+
+```bash
+npm install
+npm test
+```
 
 ## ディレクトリ構成
 

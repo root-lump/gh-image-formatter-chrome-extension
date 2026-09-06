@@ -37,6 +37,17 @@ const IMAGE_ICON_PATH =
 // --- 設定 ---
 
 let settings = { ...DEFAULT_SETTINGS };
+let nextElementId = 0;
+const textareaTargetIds = new WeakMap();
+
+function getTextareaTargetId(textarea) {
+  let targetId = textareaTargetIds.get(textarea);
+  if (!targetId) {
+    targetId = `textarea-${++nextElementId}`;
+    textareaTargetIds.set(textarea, targetId);
+  }
+  return targetId;
+}
 
 function loadSettings() {
   chrome.storage.local.get(DEFAULT_SETTINGS, (result) => {
@@ -110,9 +121,37 @@ function onPaste(textarea) {
 // --- ツールバーボタン ---
 
 function findToolbar(textarea) {
-  return textarea
-    .closest(".js-previewable-comment-form, .markdown-editor, .CommentBox")
-    ?.querySelector("markdown-toolbar");
+  if (textarea.id) {
+    const linkedToolbar = Array.from(
+      document.querySelectorAll("markdown-toolbar[for]")
+    ).find((toolbar) => toolbar.getAttribute("for") === textarea.id);
+    if (linkedToolbar) return linkedToolbar;
+  }
+
+  const form = textarea.closest(
+    ".js-previewable-comment-form, .markdown-editor, .CommentBox"
+  );
+  if (!form) return undefined;
+
+  const toolbars = Array.from(form.querySelectorAll("markdown-toolbar"));
+  if (toolbars.some((toolbar) => toolbar.hasAttribute("for"))) {
+    return undefined;
+  }
+  if (toolbars.length !== 1) return undefined;
+
+  const textareas = Array.from(form.querySelectorAll("textarea"));
+  return textareas.length === 1 ? toolbars[0] : undefined;
+}
+
+function getTextareas() {
+  const textareas = new Set(document.querySelectorAll(TEXTAREA_SELECTOR));
+
+  document.querySelectorAll("markdown-toolbar[for]").forEach((toolbar) => {
+    const target = document.getElementById(toolbar.getAttribute("for"));
+    if (target instanceof HTMLTextAreaElement) textareas.add(target);
+  });
+
+  return textareas;
 }
 
 function createFormatButton(textarea) {
@@ -120,9 +159,12 @@ function createFormatButton(textarea) {
   button.type = "button";
   button.className = "gh-image-formatter-btn";
 
-  const btnId = `gh-image-formatter-btn-${Date.now()}`;
-  const tooltipId = `gh-image-formatter-tooltip-${Date.now()}`;
+  const targetId = getTextareaTargetId(textarea);
+  const btnId = `gh-image-formatter-btn-${++nextElementId}`;
+  const tooltipId = `gh-image-formatter-tooltip-${++nextElementId}`;
   button.id = btnId;
+  button.dataset.imageFormatterTarget = targetId;
+  button.imageFormatterTextarea = textarea;
   button.setAttribute("aria-labelledby", tooltipId);
 
   // アイコン
@@ -160,22 +202,46 @@ function createFormatButton(textarea) {
 
 function addFormatButton(textarea) {
   const toolbar = findToolbar(textarea);
-  if (!toolbar || toolbar.querySelector(".gh-image-formatter-btn")) return;
+  if (!toolbar) return;
+
+  const targetId = getTextareaTargetId(textarea);
+  toolbar.querySelectorAll(".gh-image-formatter-btn").forEach((existingButton) => {
+    if (!existingButton.imageFormatterTextarea?.isConnected) {
+      existingButton.closest(".gh-image-formatter-wrapper")?.remove();
+    }
+  });
+  if (
+    toolbar.querySelector(
+      `.gh-image-formatter-btn[data-image-formatter-target="${targetId}"]`
+    )
+  ) {
+    return;
+  }
 
   const button = createFormatButton(textarea);
   const headerBtn = toolbar.querySelector('[data-md-button="header-3"]');
+  const wrapper = document.createElement("div");
+  wrapper.className = "ActionBar-item gh-image-formatter-wrapper";
+  wrapper.dataset.targets = "action-bar.items";
+  wrapper.appendChild(button);
 
-  if (headerBtn) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "ActionBar-item gh-image-formatter-wrapper";
-    wrapper.dataset.targets = "action-bar.items";
-    wrapper.appendChild(button);
-    headerBtn.closest(".ActionBar-item").insertAdjacentElement("beforebegin", wrapper);
+  const headerItem = headerBtn?.closest(".ActionBar-item");
+  if (headerItem) {
+    headerItem.insertAdjacentElement("beforebegin", wrapper);
+  } else {
+    toolbar.appendChild(wrapper);
   }
 }
 
 function removeFormatButton(textarea) {
-  findToolbar(textarea)?.querySelector(".gh-image-formatter-wrapper")?.remove();
+  const toolbar = findToolbar(textarea);
+  const targetId = getTextareaTargetId(textarea);
+  toolbar
+    ?.querySelector(
+      `.gh-image-formatter-btn[data-image-formatter-target="${targetId}"]`
+    )
+    ?.closest(".gh-image-formatter-wrapper")
+    ?.remove();
 }
 
 // --- textarea 初期化・設定適用 ---
@@ -187,7 +253,7 @@ function initTextarea(textarea) {
 }
 
 function applyToAllTextareas() {
-  document.querySelectorAll(TEXTAREA_SELECTOR).forEach((textarea) => {
+  getTextareas().forEach((textarea) => {
     initTextarea(textarea);
     if (settings.showButton) {
       addFormatButton(textarea);
