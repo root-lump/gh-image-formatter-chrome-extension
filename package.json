@@ -1,0 +1,10 @@
+{
+  "name": "gh-image-formatter-chrome-extension",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/content.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}
